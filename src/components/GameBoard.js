@@ -174,6 +174,143 @@ export class GameBoard extends BaseComponent {
           height: 100%;
         }
 
+        #players-display {
+          background: rgba(212, 175, 55, 0.2);
+          color: #ccc;
+          border: 1px solid rgba(212, 175, 55, 0.4);
+          cursor: pointer;
+          padding: 4px 12px;
+          border-radius: var(--border-radius-full);
+          transition: all var(--transition-normal);
+          font-size: var(--font-size-sm);
+        }
+
+        #players-display:hover {
+          background: rgba(212, 175, 55, 0.3);
+          border-color: rgba(212, 175, 55, 0.6);
+          color: var(--color-accent);
+        }
+
+        /* Player List Modal */
+        .players-modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          display: none;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+
+        .players-modal.show {
+          display: flex;
+        }
+
+        .players-modal-content {
+          background: rgba(26, 26, 26, 0.95);
+          border: 2px solid var(--color-accent);
+          border-radius: var(--border-radius-lg);
+          padding: var(--spacing-lg);
+          max-width: 400px;
+          max-height: 70vh;
+          overflow-y: auto;
+          box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .players-modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--spacing-lg);
+          padding-bottom: var(--spacing-md);
+          border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .players-modal-header h2 {
+          color: var(--color-accent);
+          margin: 0;
+          font-size: var(--font-size-lg);
+        }
+
+        .players-modal-close {
+          background: none;
+          border: none;
+          color: var(--color-accent);
+          font-size: var(--font-size-xl);
+          cursor: pointer;
+          padding: 0;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .players-modal-close:hover {
+          color: #fff;
+        }
+
+        .player-list {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-md);
+        }
+
+        .player-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: var(--spacing-md);
+          background: rgba(51, 51, 51, 0.5);
+          border-radius: var(--border-radius-md);
+          border-left: 3px solid transparent;
+        }
+
+        .player-item.alive {
+          border-left-color: var(--color-success);
+        }
+
+        .player-item.dead {
+          border-left-color: var(--color-danger);
+          opacity: 0.6;
+        }
+
+        .player-item.human {
+          border-left-color: var(--color-accent);
+        }
+
+        .player-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .player-name {
+          color: var(--color-light);
+          font-weight: var(--font-weight-medium);
+        }
+
+        .player-role {
+          color: #aaa;
+          font-size: var(--font-size-xs);
+        }
+
+        .player-status {
+          font-size: var(--font-size-sm);
+          font-weight: var(--font-weight-medium);
+        }
+
+        .player-status.alive {
+          color: var(--color-success);
+        }
+
+        .player-status.dead {
+          color: var(--color-danger);
+        }
+
         @media (max-width: 1200px) {
           .game-container {
             grid-template-columns: 1fr;
@@ -191,7 +328,7 @@ export class GameBoard extends BaseComponent {
             <h1>🐺 Weerwolven van Wakkerdam</h1>
             <div class="phase-info">
               <div class="phase-badge" id="phase-display">Laden...</div>
-              <div class="phase-badge" id="players-display">Spelers</div>
+              <button class="phase-badge" id="players-display">Spelers</button>
             </div>
           </div>
 
@@ -212,6 +349,19 @@ export class GameBoard extends BaseComponent {
           </div>
         </div>
       </div>
+
+      <!-- Players List Modal -->
+      <div class="players-modal" id="players-modal">
+        <div class="players-modal-content">
+          <div class="players-modal-header">
+            <h2>Spelers</h2>
+            <button class="players-modal-close" id="modal-close">×</button>
+          </div>
+          <div class="player-list" id="player-list">
+            <!-- Player items will be inserted here -->
+          </div>
+        </div>
+      </div>
     `;
         this.setupChatBox();
         this.attachEventListeners();
@@ -229,17 +379,35 @@ export class GameBoard extends BaseComponent {
                 this.gameEngine.advanceToVoting();
             }
         });
+        // Players modal
+        const playersBtn = this.shadowRoot?.querySelector('#players-display');
+        playersBtn?.addEventListener('click', () => {
+            this.openPlayersModal();
+        });
+        const modalClose = this.shadowRoot?.querySelector('#modal-close');
+        modalClose?.addEventListener('click', () => {
+            this.closePlayersModal();
+        });
+        const modal = this.shadowRoot?.querySelector('#players-modal');
+        modal?.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.closePlayersModal();
+            }
+        });
     }
     attachGlobalEventListeners() {
         this.onDocumentEvent('playerDied', (e) => {
             this.updatePlayerCards();
+            this.updatePlayersList();
         });
         this.onDocumentEvent('playerExecuted', (e) => {
             this.updatePlayerCards();
+            this.updatePlayersList();
         });
         this.onDocumentEvent('phaseChanged', (e) => {
             if (e instanceof CustomEvent) {
                 this.updatePhaseDisplay(e.detail);
+                this.updatePlayersList();
             }
         });
         this.onDocumentEvent('botChatMessage', (e) => {
@@ -265,14 +433,66 @@ export class GameBoard extends BaseComponent {
             playersGrid.appendChild(card);
             // Store reference for later
             this.playerCards.set(player.id, card);
-            // Add selection listener for voting
-            if (player.alive && !isHuman) {
+            // Add selection listener for voting on any alive player
+            if (player.alive) {
                 card.addEventListener('playerSelected', (e) => {
                     if (e instanceof CustomEvent) {
                         this.onPlayerSelected(e.detail.playerId);
                     }
                 });
             }
+        }
+        // Update player list in modal
+        this.updatePlayersList();
+    }
+    updatePlayersList() {
+        if (!this.gameEngine)
+            return;
+        const playerList = this.shadowRoot?.querySelector('#player-list');
+        if (!playerList)
+            return;
+        playerList.innerHTML = '';
+        const players = this.gameEngine.getPlayers();
+        for (const player of players) {
+            const isHuman = player instanceof Player;
+            const item = document.createElement('div');
+            item.className = `player-item ${player.alive ? 'alive' : 'dead'} ${isHuman ? 'human' : ''}`;
+            const roleName = this.getRoleName(player.role);
+            const statusText = player.alive ? '✓ Leeft' : '✗ Dood';
+            const playerLabel = isHuman ? ' (Jij)' : '';
+            item.innerHTML = `
+        <div class="player-info">
+          <div class="player-name">${player.name}${playerLabel}</div>
+          <div class="player-role">${roleName}</div>
+        </div>
+        <div class="player-status ${player.alive ? 'alive' : 'dead'}">
+          ${statusText}
+        </div>
+      `;
+            playerList.appendChild(item);
+        }
+    }
+    getRoleName(role) {
+        const roleNames = {
+            'werewolf': '🐺 Weerwolf',
+            'villager': '👤 Dorpeling',
+            'seer': '🔮 Ziener',
+            'witch': '🧙 Heks',
+            'thief': '🤝 Dief',
+            'cupido': '💘 Cupido',
+        };
+        return roleNames[role] || role;
+    }
+    openPlayersModal() {
+        const modal = this.shadowRoot?.querySelector('#players-modal');
+        if (modal) {
+            modal.classList.add('show');
+        }
+    }
+    closePlayersModal() {
+        const modal = this.shadowRoot?.querySelector('#players-modal');
+        if (modal) {
+            modal.classList.remove('show');
         }
     }
     updatePhaseDisplay(detail) {
@@ -310,6 +530,10 @@ export class GameBoard extends BaseComponent {
     }
     onPlayerSelected(playerId) {
         if (this.gameEngine?.getPhase() !== GamePhase.VOTING)
+            return;
+        // Don't allow voting for yourself
+        const player = this.gameEngine.getPlayers().find(p => p instanceof Player);
+        if (playerId === player?.id)
             return;
         // Clear previous selection
         if (this.selectedPlayerId && this.selectedPlayerId !== playerId) {

@@ -7,7 +7,7 @@ export declare class ChatBox extends BaseComponent {
     constructor();
     connectedCallback(): void;
     /**
-     * Add a message to the chat
+     * Add a message to the chat (prepended for newest first)
      */
     addMessage(playerId: string, playerName: string, message: string): void;
     /**
@@ -16,8 +16,6 @@ export declare class ChatBox extends BaseComponent {
     clearMessages(): void;
     private render;
     private getChatType;
-    private formatTime;
     private escapeHtml;
-    private scrollToBottom;
 }
 //# sourceMappingURL=ChatBox.d.ts.map

@@ -26,6 +26,10 @@ export declare class PlayerCard extends BaseComponent {
      * Reset selection
      */
     resetSelection(): void;
+    /**
+     * Attach click listener to card
+     */
+    private attachClickListener;
     private render;
 }
 //# sourceMappingURL=PlayerCard.d.ts.map

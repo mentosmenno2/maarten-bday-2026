@@ -27,6 +27,7 @@ export class PlayerCard extends BaseComponent {
     this.isHuman = isHuman;
     this.showRole = showRole;
     this.render();
+    this.attachClickListener();
   }
 
   /**
@@ -55,6 +56,16 @@ export class PlayerCard extends BaseComponent {
   resetSelection(): void {
     this.isSelected = false;
     this.render();
+  }
+
+  /**
+   * Attach click listener to card
+   */
+  private attachClickListener(): void {
+    const card = this.shadowRoot?.querySelector('.card');
+    if (card && this.player?.alive) {
+      card.addEventListener('click', () => this.toggleSelection());
+    }
   }
 
   private render(): void {

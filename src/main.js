@@ -1,5 +1,9 @@
 import { GameEngine } from './core/GameEngine';
 import { GamePhase } from './types';
+// Side-effect imports for Web Components registration
+import './components/DifficultySelector';
+import './components/GameBoard';
+import './components/GameOverScreen';
 import { ChatTemplateBuilder } from './utils/ChatTemplateBuilder';
 import { Randomizer } from './utils/Randomizer';
 /**
@@ -44,6 +48,12 @@ class WeerwolvenApp {
             writable: true,
             value: null
         });
+        Object.defineProperty(this, "botMentions", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: {}
+        }); // Track how many times each bot was mentioned
         this.setupApp();
     }
     setupApp() {
@@ -56,9 +66,12 @@ class WeerwolvenApp {
         this.difficultySelector = document.createElement('difficulty-selector');
         this.gameBoard = document.createElement('game-board');
         this.gameOverScreen = document.createElement('game-over-screen');
-        appDiv.appendChild(this.difficultySelector);
-        appDiv.appendChild(this.gameBoard);
-        appDiv.appendChild(this.gameOverScreen);
+        if (this.difficultySelector)
+            appDiv.appendChild(this.difficultySelector);
+        if (this.gameBoard)
+            appDiv.appendChild(this.gameBoard);
+        if (this.gameOverScreen)
+            appDiv.appendChild(this.gameOverScreen);
         // Hide game and gameover screens initially
         this.gameBoard.classList.add('hidden');
         this.gameOverScreen.classList.add('hidden');
@@ -143,11 +156,19 @@ class WeerwolvenApp {
     startBotChat() {
         if (!this.gameEngine)
             return;
+        // Limit chat messages: stop after 8 messages or if only 2 players left
+        let messageCount = 0;
+        const maxMessages = Math.min(8, Math.max(3, this.gameEngine.getAlivePlayers().length - 1));
         const config = this.gameEngine.getPlayers().length > 6
             ? { frequency: 0.7, interval: 2000 }
             : { frequency: 0.5, interval: 3000 };
         this.chatInterval = setInterval(() => {
+            if (messageCount >= maxMessages) {
+                this.stopBotChat();
+                return;
+            }
             this.generateBotChatMessage();
+            messageCount++;
         }, config.interval);
     }
     stopBotChat() {
@@ -155,49 +176,76 @@ class WeerwolvenApp {
             clearInterval(this.chatInterval);
             this.chatInterval = null;
         }
+        this.botMentions = {};
     }
     generateBotChatMessage() {
         if (!this.gameEngine)
             return;
-        const aliveBots = this.gameEngine.getAlivePlayers()
-            .filter(p => p.constructor.name === 'Bot' && p.alive);
-        if (aliveBots.length === 0)
+        const alivePlayers = this.gameEngine.getAlivePlayers();
+        const aliveBots = alivePlayers.filter(p => p.constructor.name === 'Bot' && p.alive);
+        if (aliveBots.length === 0 || alivePlayers.length < 2)
             return;
         // Random bot speaks
         const speaker = Randomizer.pickRandom(aliveBots);
-        const otherPlayers = this.gameEngine.getAlivePlayers()
-            .filter(p => p.id !== speaker.id);
+        const otherPlayers = alivePlayers.filter(p => p.id !== speaker.id);
         if (otherPlayers.length === 0)
             return;
         let message = '';
-        const rand = Math.random();
-        if (rand < speaker.aggression / 100) {
+        const rand = Math.random() * 100;
+        // Non-overlapping probability ranges
+        const accuseChance = speaker.aggression * 0.4; // 0-40% chance to accuse
+        const bandwagonChance = (100 - speaker.aggression) * 0.2; // Up to 20% to bandwagon
+        const suspicionChance = 30; // Up to 30% to express suspicion
+        const defenseChance = 100 - accuseChance - bandwagonChance - suspicionChance;
+        if (rand < accuseChance) {
             // Accuse someone
             const target = Randomizer.pickRandom(otherPlayers);
             message = ChatTemplateBuilder.buildAccusation(speaker.name, target.name);
+            this.botMentions[target.id] = (this.botMentions[target.id] || 0) + 1;
         }
-        else if (rand < (speaker.aggression + 30) / 100) {
-            // Bandwagon
-            const target = Randomizer.pickRandom(otherPlayers);
-            message = ChatTemplateBuilder.buildBandwagon(speaker.name, target.name);
+        else if (rand < accuseChance + bandwagonChance) {
+            // Bandwagon - only if someone has been accused
+            if (Object.keys(this.botMentions).length > 0) {
+                const mostMentioned = Object.entries(this.botMentions)
+                    .sort((a, b) => b[1] - a[1])[0][0];
+                const targetPlayer = alivePlayers.find(p => p.id === mostMentioned);
+                if (targetPlayer) {
+                    message = ChatTemplateBuilder.buildBandwagon(speaker.name, targetPlayer.name);
+                }
+                else {
+                    const target = Randomizer.pickRandom(otherPlayers);
+                    message = ChatTemplateBuilder.buildSuspicion(speaker.name, target.name);
+                }
+            }
+            else {
+                const target = Randomizer.pickRandom(otherPlayers);
+                message = ChatTemplateBuilder.buildSuspicion(speaker.name, target.name);
+            }
         }
-        else if (rand < (speaker.aggression + 60) / 100) {
-            // Defend
-            message = ChatTemplateBuilder.buildDefense(speaker.name);
-        }
-        else {
-            // Suspicion
+        else if (rand < accuseChance + bandwagonChance + suspicionChance) {
+            // Suspicion about someone
             const target = Randomizer.pickRandom(otherPlayers);
             message = ChatTemplateBuilder.buildSuspicion(speaker.name, target.name);
         }
-        // Dispatch chat message event
-        document.dispatchEvent(new CustomEvent('botChatMessage', {
-            detail: {
-                playerId: speaker.id,
-                playerName: speaker.name,
-                message,
-            },
-        }));
+        else if (Object.keys(this.botMentions).some(id => id === speaker.id)) {
+            // Only defend if the speaker has been mentioned
+            message = ChatTemplateBuilder.buildDefense(speaker.name);
+        }
+        else {
+            // Default to suspicion if nothing else fits
+            const target = Randomizer.pickRandom(otherPlayers);
+            message = ChatTemplateBuilder.buildSuspicion(speaker.name, target.name);
+        }
+        if (message) {
+            // Dispatch chat message event
+            document.dispatchEvent(new CustomEvent('botChatMessage', {
+                detail: {
+                    playerId: speaker.id,
+                    playerName: speaker.name,
+                    message,
+                },
+            }));
+        }
     }
 }
 // Initialize app when DOM is ready

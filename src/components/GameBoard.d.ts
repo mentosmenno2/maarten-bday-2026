@@ -19,6 +19,10 @@ export declare class GameBoard extends BaseComponent {
     private attachEventListeners;
     private attachGlobalEventListeners;
     private updatePlayerCards;
+    private updatePlayersList;
+    private getRoleName;
+    private openPlayersModal;
+    private closePlayersModal;
     private updatePhaseDisplay;
     private onPlayerSelected;
 }

@@ -16,10 +16,10 @@ export class ChatBox extends BaseComponent {
         this.render();
     }
     /**
-     * Add a message to the chat
+     * Add a message to the chat (prepended for newest first)
      */
     addMessage(playerId, playerName, message) {
-        this.messages.push({
+        this.messages.unshift({
             playerId,
             playerName,
             message,
@@ -27,10 +27,9 @@ export class ChatBox extends BaseComponent {
         });
         // Keep only last 20 messages
         if (this.messages.length > 20) {
-            this.messages.shift();
+            this.messages.pop();
         }
         this.render();
-        this.scrollToBottom();
     }
     /**
      * Clear all messages
@@ -131,11 +130,6 @@ export class ChatBox extends BaseComponent {
           color: var(--color-accent);
         }
 
-        .message-time {
-          font-size: var(--font-size-xs);
-          color: #666;
-        }
-
         .message-text {
           color: #ccc;
           line-height: 1.4;
@@ -173,7 +167,6 @@ export class ChatBox extends BaseComponent {
               <div class="message ${this.getChatType(msg.message)}">
                 <div class="message-header">
                   <span class="message-player">${msg.playerName}</span>
-                  <span class="message-time">${this.formatTime(msg.timestamp)}</span>
                 </div>
                 <div class="message-text">${this.escapeHtml(msg.message)}</div>
               </div>
@@ -194,31 +187,10 @@ export class ChatBox extends BaseComponent {
         }
         return '';
     }
-    formatTime(timestamp) {
-        const now = Date.now();
-        const diff = now - timestamp;
-        if (diff < 60000) {
-            return 'nu';
-        }
-        else if (diff < 3600000) {
-            return `${Math.floor(diff / 60000)}m`;
-        }
-        else {
-            return `${Math.floor(diff / 3600000)}u`;
-        }
-    }
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    }
-    scrollToBottom() {
-        setTimeout(() => {
-            const chatMessages = this.shadowRoot?.querySelector('.chat-messages');
-            if (chatMessages) {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        }, 0);
     }
 }
 customElements.define('chat-box', ChatBox);

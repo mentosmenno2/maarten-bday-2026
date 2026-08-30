@@ -1,0 +1,23 @@
+import { BaseComponent } from './BaseComponent';
+/**
+ * Chat display component for bot discussions
+ */
+export declare class ChatBox extends BaseComponent {
+    private messages;
+    constructor();
+    connectedCallback(): void;
+    /**
+     * Add a message to the chat
+     */
+    addMessage(playerId: string, playerName: string, message: string): void;
+    /**
+     * Clear all messages
+     */
+    clearMessages(): void;
+    private render;
+    private getChatType;
+    private formatTime;
+    private escapeHtml;
+    private scrollToBottom;
+}
+//# sourceMappingURL=ChatBox.d.ts.map

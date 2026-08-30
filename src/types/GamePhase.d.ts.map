@@ -1,1 +1,0 @@
-{"version":3,"file":"GamePhase.d.ts","sourceRoot":"","sources":["GamePhase.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,oBAAY,SAAS;IACnB,IAAI,SAAS;IACb,iBAAiB,sBAAsB;IACvC,KAAK,UAAU;IACf,KAAK,UAAU;IACf,OAAO,YAAY;IACnB,cAAc,mBAAmB;IACjC,MAAM,WAAW;IACjB,SAAS,cAAc;IACvB,SAAS,cAAc;CACxB;AAED;;GAEG;AACH,wBAAgB,iBAAiB,CAAC,KAAK,EAAE,SAAS,GAAG,MAAM,CAa1D"}

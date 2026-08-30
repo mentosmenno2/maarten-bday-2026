@@ -1,7 +1,7 @@
 {
   "name": "maarten-bday-2026",
   "version": "1.0.0",
-  "description": "Single-player web version of Weerwolven van Wakkerdam",
+  "description": "Maarten's Birthday 2026",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,21 +1,21 @@
 import type { ShowDialog } from '../window/showDialog';
 
+export interface StartMenuActions {
+    openApp: (id: string) => void;
+    showDialog: ShowDialog;
+    onLogOff: () => void;
+    onTurnOff: () => void;
+}
+
 export class StartMenu {
     private readonly menuElement: HTMLElement;
     private readonly buttonElement: HTMLElement;
-    private readonly openApp: (id: string) => void;
-    private readonly showDialog: ShowDialog;
+    private readonly actions: StartMenuActions;
 
-    constructor(
-        menuElement: HTMLElement,
-        buttonElement: HTMLElement,
-        openApp: (id: string) => void,
-        showDialog: ShowDialog,
-    ) {
+    constructor(menuElement: HTMLElement, buttonElement: HTMLElement, actions: StartMenuActions) {
         this.menuElement = menuElement;
         this.buttonElement = buttonElement;
-        this.openApp = openApp;
-        this.showDialog = showDialog;
+        this.actions = actions;
 
         this.buttonElement.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -29,7 +29,7 @@ export class StartMenu {
             const item = target.closest<HTMLElement>('.start-menu__item');
 
             if (item?.dataset.appId) {
-                this.openApp(item.dataset.appId);
+                this.actions.openApp(item.dataset.appId);
                 this.close();
                 return;
             }
@@ -43,7 +43,7 @@ export class StartMenu {
 
             if (action === 'turn-off') {
                 this.close();
-                this.showTurnOffDialog();
+                this.actions.onTurnOff();
             }
         });
 
@@ -79,33 +79,12 @@ export class StartMenu {
     }
 
     private showLogOffDialog(): void {
-        this.showDialog({
+        this.actions.showDialog({
             title: 'Log Off Windows',
             message: 'Are you sure you want to log off?',
             buttons: [
-                {
-                    label: 'Log Off',
-                    onClick: () =>
-                        this.showDialog({
-                            title: 'Windows',
-                            message: 'Menno mag blijven. Uitloggen is geannuleerd.',
-                        }),
-                },
+                { label: 'Log Off', onClick: () => this.actions.onLogOff() },
                 { label: 'Cancel' },
-            ],
-        });
-    }
-
-    private showTurnOffDialog(): void {
-        const respond = (message: string) => () => this.showDialog({ title: 'Windows', message });
-
-        this.showDialog({
-            title: 'Turn off computer',
-            message: 'What do you want the computer to do?',
-            buttons: [
-                { label: 'Stand By', onClick: respond('De computer heeft even geen zin.') },
-                { label: 'Turn Off', onClick: respond('Deze computer laat zich niet uitzetten.') },
-                { label: 'Restart', onClick: respond('Herstarten duurt ongeveer 25 jaar.') },
             ],
         });
     }

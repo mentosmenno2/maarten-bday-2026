@@ -60,6 +60,10 @@ export class WindowManager {
         }
     }
 
+    closeAllWindows(): void {
+        [...this.windows.keys()].forEach((id) => this.closeWindow(id));
+    }
+
     activate(id: string): void {
         const managedWindow = this.windows.get(id);
 

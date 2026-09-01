@@ -31,7 +31,7 @@
       <div class="start-menu" hidden>
         <div class="start-menu__header">
           <span class="start-menu__avatar"></span>
-          <span class="start-menu__user">Menno</span>
+          <span class="start-menu__user">Maarten</span>
         </div>
         <div class="start-menu__body">
           <div class="start-menu__column start-menu__column--left">
@@ -77,6 +77,34 @@
         <div class="taskbar__tray">
           <span class="taskbar__clock"></span>
         </div>
+      </div>
+    </div>
+    <div class="boot-screens" data-boot-screens>
+      <div class="power-off-screen" data-screen="power-off">
+        <button type="button" class="power-off-screen__button" data-action="power-on" title="Turn on"></button>
+        <p class="power-off-screen__hint">Press the power button to start</p>
+      </div>
+      <div class="boot-loading-screen" data-screen="booting" hidden>
+        <div class="boot-flag">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="boot-loading-screen__bar">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="boot-loading-screen__text">Starting Windows...</p>
+      </div>
+      <div class="login-screen" data-screen="login" hidden>
+        <p class="login-screen__title">Maarten's Birthday</p>
+        <button type="button" class="login-screen__user" data-action="log-in">
+          <span class="login-screen__avatar"></span>
+          <span class="login-screen__name">Maarten</span>
+        </button>
+        <p class="login-screen__hint">Click your name to log on</p>
       </div>
     </div>
   </div>

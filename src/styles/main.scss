@@ -5,6 +5,7 @@
 @use 'start-menu';
 @use 'window';
 @use 'apps';
+@use 'boot-screens';
 
 :root {
     --taskbar-height: 34px;

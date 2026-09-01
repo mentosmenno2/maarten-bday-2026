@@ -1,9 +1,11 @@
 import './styles/main.scss';
+import { registerApp } from './apps/appRegistry';
 import { createOpenApp } from './apps/openApp';
 import { registerDefaultApps } from './apps/registerDefaultApps';
 import { DesktopClock } from './desktop/DesktopClock';
 import { DesktopIcons } from './desktop/DesktopIcons';
 import { StartMenu } from './desktop/StartMenu';
+import { registerEasterEggs } from './easter-eggs/registerEasterEggs';
 import { WindowManager } from './window/WindowManager';
 import { createShowDialog } from './window/showDialog';
 
@@ -30,4 +32,12 @@ if (desktopAreaElement && taskbarWindowsElement) {
     if (startMenuElement && startButtonElement) {
         new StartMenu(startMenuElement, startButtonElement, openApp, showDialog);
     }
+
+    registerEasterEggs({
+        windowManager,
+        desktopElement: desktopAreaElement,
+        openApp,
+        showDialog,
+        registerApp,
+    });
 }

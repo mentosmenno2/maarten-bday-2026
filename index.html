@@ -9,6 +9,42 @@
   <div id="app">
     <div class="desktop">
       <div class="desktop__area"></div>
+      <div class="start-menu" hidden>
+        <div class="start-menu__header">
+          <span class="start-menu__avatar"></span>
+          <span class="start-menu__user">Menno</span>
+        </div>
+        <div class="start-menu__body">
+          <div class="start-menu__column start-menu__column--left">
+            <button type="button" class="start-menu__item" data-app-id="internet-explorer">
+              <span class="start-menu__icon start-menu__icon--internet"></span>
+              <span class="start-menu__label">Internet Explorer</span>
+            </button>
+            <button type="button" class="start-menu__item" data-app-id="notepad">
+              <span class="start-menu__icon start-menu__icon--notepad"></span>
+              <span class="start-menu__label">Notepad</span>
+            </button>
+          </div>
+          <div class="start-menu__column start-menu__column--right">
+            <button type="button" class="start-menu__item" data-app-id="my-computer">
+              <span class="start-menu__icon start-menu__icon--computer"></span>
+              <span class="start-menu__label">My Computer</span>
+            </button>
+            <button type="button" class="start-menu__item" data-app-id="recycle-bin">
+              <span class="start-menu__icon start-menu__icon--recycle-bin"></span>
+              <span class="start-menu__label">Recycle Bin</span>
+            </button>
+            <button type="button" class="start-menu__item" data-app-id="control-panel">
+              <span class="start-menu__icon start-menu__icon--control-panel"></span>
+              <span class="start-menu__label">Control Panel</span>
+            </button>
+          </div>
+        </div>
+        <div class="start-menu__footer">
+          <button type="button" class="start-menu__action" data-action="log-off">Log Off</button>
+          <button type="button" class="start-menu__action" data-action="turn-off">Turn Off Computer</button>
+        </div>
+      </div>
       <div class="taskbar">
         <div class="taskbar__start">
           <button type="button" class="start-button">

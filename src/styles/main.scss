@@ -3,6 +3,7 @@
 @use 'taskbar';
 @use 'start-button';
 @use 'start-menu';
+@use 'window';
 
 :root {
     --taskbar-height: 34px;
@@ -23,4 +24,14 @@ body {
 
 #app {
     height: 100%;
+}
+
+// Tijdelijk, hoort bij de testknoppen in main.ts.
+.window-test-button {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin: 0 8px 4px auto;
+    font-family: inherit;
+    font-size: 11px;
 }

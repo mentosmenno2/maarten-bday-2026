@@ -65,12 +65,14 @@ export function createOpenDateTimeWindow(
                     title: 'Windows',
                     message: 'Happy Birthday, Maarten!',
                     icon: successIconUrl,
+                    sound: 'tada',
                 });
             } else if (year === 2026 && month === 8 && day === 12) {
                 showDialog({
                     title: 'Windows',
                     message: 'Congratulations on your engagement!',
                     icon: heartsIconUrl,
+                    sound: 'tada',
                 });
             }
         });

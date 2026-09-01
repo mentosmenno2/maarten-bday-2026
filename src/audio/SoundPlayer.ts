@@ -6,8 +6,9 @@ import recycleUrl from '../assets/audio/recycle.mp3';
 import restoreUrl from '../assets/audio/restore.mp3';
 import shutdownUrl from '../assets/audio/shutdown.mp3';
 import startupUrl from '../assets/audio/startup.mp3';
+import tadaUrl from '../assets/audio/tada.mp3';
 
-export type SoundId = 'startup' | 'logon' | 'logoff' | 'shutdown' | 'minimize' | 'restore' | 'recycle' | 'dialog';
+export type SoundId = 'startup' | 'logon' | 'logoff' | 'shutdown' | 'minimize' | 'restore' | 'recycle' | 'dialog' | 'tada';
 
 const soundUrls: Record<SoundId, string> = {
     startup: startupUrl,
@@ -18,6 +19,7 @@ const soundUrls: Record<SoundId, string> = {
     restore: restoreUrl,
     recycle: recycleUrl,
     dialog: dialogUrl,
+    tada: tadaUrl,
 };
 
 export function playSound(id: SoundId): void {

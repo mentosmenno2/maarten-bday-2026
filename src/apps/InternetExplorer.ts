@@ -1,6 +1,6 @@
 import type { AppDefinition } from './appRegistry';
 
-const DEFAULT_URL = 'https://mpsijm.ddns.net/menno/2025/';
+const DEFAULT_URL = 'https://maarten.mennovandenende.nl/2025/game/';
 
 export const internetExplorerApp: AppDefinition = {
     id: 'internet-explorer',
@@ -71,6 +71,23 @@ export const internetExplorerApp: AppDefinition = {
 
         frame.addEventListener('load', () => {
             statusBar.textContent = 'Done';
+
+            // Alleen te detecteren als de pagina same-origin is; browsers blokkeren dit voor andere origins.
+            let navigatedUrl: string | null = null;
+
+            try {
+                navigatedUrl = frame.contentWindow?.location.href ?? null;
+            } catch {
+                navigatedUrl = null;
+            }
+
+            if (navigatedUrl && navigatedUrl !== 'about:blank' && navigatedUrl !== history[historyIndex]) {
+                addressInput.value = navigatedUrl;
+                history.splice(historyIndex + 1, history.length);
+                history.push(navigatedUrl);
+                historyIndex = history.length - 1;
+                updateNavigationState();
+            }
         });
 
         backButton.addEventListener('click', () => {

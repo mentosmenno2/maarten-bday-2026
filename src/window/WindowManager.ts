@@ -2,34 +2,54 @@ interface ManagedWindow {
     id: string;
     title: string;
     element: HTMLElement;
+    taskbarButton: HTMLButtonElement;
     minimized: boolean;
 }
 
 export class WindowManager {
     private readonly areaElement: HTMLElement;
+    private readonly taskbarElement: HTMLElement;
     private readonly windows = new Map<string, ManagedWindow>();
     private nextZIndex = 10;
     private nextOffset = 0;
     private activeWindowId: string | null = null;
 
-    constructor(areaElement: HTMLElement) {
+    constructor(areaElement: HTMLElement, taskbarElement: HTMLElement) {
         this.areaElement = areaElement;
+        this.taskbarElement = taskbarElement;
     }
 
     openWindow(id: string, title: string, content: HTMLElement): void {
-        const existingWindow = this.windows.get(id);
-
-        if (existingWindow) {
+        if (this.windows.has(id)) {
             this.activate(id);
             return;
         }
 
-        const element = this.createWindowElement(title, content);
+        const element = this.createWindowElement(id, title, content);
         element.addEventListener('pointerdown', () => this.activate(id));
 
+        const taskbarButton = this.createTaskbarButton(id, title);
+
         this.areaElement.append(element);
-        this.windows.set(id, { id, title, element, minimized: false });
+        this.taskbarElement.append(taskbarButton);
+        this.windows.set(id, { id, title, element, taskbarButton, minimized: false });
         this.activate(id);
+    }
+
+    closeWindow(id: string): void {
+        const managedWindow = this.windows.get(id);
+
+        if (!managedWindow) {
+            return;
+        }
+
+        managedWindow.element.remove();
+        managedWindow.taskbarButton.remove();
+        this.windows.delete(id);
+
+        if (this.activeWindowId === id) {
+            this.activeWindowId = null;
+        }
     }
 
     activate(id: string): void {
@@ -40,15 +60,18 @@ export class WindowManager {
         }
 
         if (this.activeWindowId) {
-            this.windows.get(this.activeWindowId)?.element.classList.remove('window--active');
+            const previousWindow = this.windows.get(this.activeWindowId);
+            previousWindow?.element.classList.remove('window--active');
+            previousWindow?.taskbarButton.classList.remove('taskbar-button--active');
         }
 
         managedWindow.element.classList.add('window--active');
+        managedWindow.taskbarButton.classList.add('taskbar-button--active');
         managedWindow.element.style.zIndex = String(this.nextZIndex++);
         this.activeWindowId = id;
     }
 
-    private createWindowElement(title: string, content: HTMLElement): HTMLElement {
+    private createWindowElement(id: string, title: string, content: HTMLElement): HTMLElement {
         const element = document.createElement('div');
         element.className = 'window';
         element.style.left = `${40 + this.nextOffset}px`;
@@ -61,7 +84,19 @@ export class WindowManager {
         const titleElement = document.createElement('span');
         titleElement.className = 'window__title';
         titleElement.textContent = title;
-        titlebar.append(titleElement);
+
+        const controls = document.createElement('div');
+        controls.className = 'window__controls';
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'window__control window__control--close';
+        closeButton.title = 'Close';
+        closeButton.textContent = '✕';
+        closeButton.addEventListener('click', () => this.closeWindow(id));
+        controls.append(closeButton);
+
+        titlebar.append(titleElement, controls);
 
         const contentElement = document.createElement('div');
         contentElement.className = 'window__content';
@@ -70,5 +105,15 @@ export class WindowManager {
         element.append(titlebar, contentElement);
 
         return element;
+    }
+
+    private createTaskbarButton(id: string, title: string): HTMLButtonElement {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'taskbar-button';
+        button.textContent = title;
+        button.addEventListener('click', () => this.activate(id));
+
+        return button;
     }
 }

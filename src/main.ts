@@ -18,11 +18,12 @@ if (startMenuElement && startButtonElement) {
 }
 
 const desktopAreaElement = document.querySelector<HTMLElement>('.desktop__area');
+const taskbarWindowsElement = document.querySelector<HTMLElement>('.taskbar__windows');
 
-if (desktopAreaElement) {
+if (desktopAreaElement && taskbarWindowsElement) {
     new DesktopIcons(desktopAreaElement);
 
-    const windowManager = new WindowManager(desktopAreaElement);
+    const windowManager = new WindowManager(desktopAreaElement, taskbarWindowsElement);
 
     // Tijdelijke testknoppen, worden verwijderd zodra apps gekoppeld zijn.
     ['A', 'B', 'C'].forEach((name) => {

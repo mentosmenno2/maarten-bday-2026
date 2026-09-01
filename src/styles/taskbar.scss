@@ -42,3 +42,29 @@
     font-size: 11px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.35);
 }
+
+.taskbar-button {
+    flex: 0 1 160px;
+    height: 24px;
+    padding: 0 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #3c81f3 0%, #2f6fd8 50%, #245bbb 100%);
+    border: 1px solid #1c4fa8;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+        filter: brightness(1.12);
+    }
+
+    &--active {
+        background: linear-gradient(to bottom, #1d4fa8 0%, #2761c4 60%, #3a7ae0 100%);
+        box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.45);
+    }
+}

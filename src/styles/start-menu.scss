@@ -34,7 +34,7 @@
 .start-menu__avatar {
     width: 38px;
     height: 38px;
-    background: linear-gradient(135deg, #f7dcb4, #c98f52);
+    background: #ffffff url('../assets/icons/user.png') center / contain no-repeat;
     border: 2px solid #ffffff;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -87,20 +87,24 @@
     flex: 0 0 auto;
     width: 24px;
     height: 24px;
-    background: linear-gradient(135deg, #e8eef7, #7f93b3);
-    border: 1px solid #6d7f9c;
-    border-radius: 3px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &--computer {
+        background-image: url('../assets/icons/my-computer.png');
+    }
 
     &--internet {
-        background: linear-gradient(135deg, #cfe6ff, #1a6fc4);
+        background-image: url('../assets/icons/internet-explorer.png');
     }
 
     &--notepad {
-        background: linear-gradient(135deg, #ffffff, #c9c9c9);
+        background-image: url('../assets/icons/notepad.png');
     }
 
     &--recycle-bin {
-        background: linear-gradient(135deg, #dfe7e5, #6f8f86);
+        background-image: url('../assets/icons/recycle-bin.png');
     }
 }
 

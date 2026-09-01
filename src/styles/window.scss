@@ -1,5 +1,6 @@
 .window {
     position: absolute;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     width: 420px;
@@ -17,6 +18,16 @@
     &--active {
         border-color: #0831d9;
         box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    &--centered {
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+    }
+
+    &--maximized {
+        border-radius: 0;
     }
 }
 

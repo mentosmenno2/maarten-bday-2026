@@ -1,9 +1,17 @@
+export interface WindowOptions {
+    width?: number;
+    height?: number;
+    controls?: boolean;
+    centered?: boolean;
+}
+
 interface ManagedWindow {
     id: string;
     title: string;
     element: HTMLElement;
     taskbarButton: HTMLButtonElement;
     minimized: boolean;
+    restoreBounds: { left: string; top: string; width: string; height: string } | null;
 }
 
 export class WindowManager {
@@ -19,20 +27,20 @@ export class WindowManager {
         this.taskbarElement = taskbarElement;
     }
 
-    openWindow(id: string, title: string, content: HTMLElement): void {
+    openWindow(id: string, title: string, content: HTMLElement, options: WindowOptions = {}): void {
         if (this.windows.has(id)) {
             this.activate(id);
             return;
         }
 
-        const element = this.createWindowElement(id, title, content);
+        const element = this.createWindowElement(id, title, content, options);
         element.addEventListener('pointerdown', () => this.activate(id));
 
         const taskbarButton = this.createTaskbarButton(id, title);
 
         this.areaElement.append(element);
         this.taskbarElement.append(taskbarButton);
-        this.windows.set(id, { id, title, element, taskbarButton, minimized: false });
+        this.windows.set(id, { id, title, element, taskbarButton, minimized: false, restoreBounds: null });
         this.activate(id);
     }
 
@@ -97,12 +105,55 @@ export class WindowManager {
         }
     }
 
-    private createWindowElement(id: string, title: string, content: HTMLElement): HTMLElement {
+    toggleMaximize(id: string): void {
+        const managedWindow = this.windows.get(id);
+
+        if (!managedWindow) {
+            return;
+        }
+
+        const { element } = managedWindow;
+
+        if (managedWindow.restoreBounds) {
+            Object.assign(element.style, managedWindow.restoreBounds);
+            managedWindow.restoreBounds = null;
+            element.classList.remove('window--maximized');
+            return;
+        }
+
+        managedWindow.restoreBounds = {
+            left: element.style.left,
+            top: element.style.top,
+            width: element.style.width,
+            height: element.style.height,
+        };
+
+        element.style.left = '0px';
+        element.style.top = '0px';
+        element.style.width = `${this.areaElement.clientWidth}px`;
+        element.style.height = `${this.areaElement.clientHeight}px`;
+        element.classList.add('window--maximized');
+    }
+
+    private createWindowElement(id: string, title: string, content: HTMLElement, options: WindowOptions): HTMLElement {
         const element = document.createElement('div');
         element.className = 'window';
-        element.style.left = `${40 + this.nextOffset}px`;
-        element.style.top = `${40 + this.nextOffset}px`;
-        this.nextOffset = (this.nextOffset + 24) % 120;
+
+        if (options.width) {
+            element.style.width = `${options.width}px`;
+        }
+
+        if (options.height) {
+            element.style.height = `${options.height}px`;
+        }
+
+        if (options.centered) {
+            element.classList.add('window--centered');
+        } else {
+            element.style.left = `${40 + this.nextOffset}px`;
+            element.style.top = `${40 + this.nextOffset}px`;
+            this.nextOffset = (this.nextOffset + 24) % 120;
+        }
 
         const titlebar = document.createElement('div');
         titlebar.className = 'window__titlebar';
@@ -114,12 +165,23 @@ export class WindowManager {
         const controls = document.createElement('div');
         controls.className = 'window__controls';
 
-        const minimizeButton = document.createElement('button');
-        minimizeButton.type = 'button';
-        minimizeButton.className = 'window__control window__control--minimize';
-        minimizeButton.title = 'Minimize';
-        minimizeButton.textContent = '_';
-        minimizeButton.addEventListener('click', () => this.minimizeWindow(id));
+        if (options.controls !== false) {
+            const minimizeButton = document.createElement('button');
+            minimizeButton.type = 'button';
+            minimizeButton.className = 'window__control window__control--minimize';
+            minimizeButton.title = 'Minimize';
+            minimizeButton.textContent = '_';
+            minimizeButton.addEventListener('click', () => this.minimizeWindow(id));
+
+            const maximizeButton = document.createElement('button');
+            maximizeButton.type = 'button';
+            maximizeButton.className = 'window__control window__control--maximize';
+            maximizeButton.title = 'Maximize';
+            maximizeButton.textContent = '□';
+            maximizeButton.addEventListener('click', () => this.toggleMaximize(id));
+
+            controls.append(minimizeButton, maximizeButton);
+        }
 
         const closeButton = document.createElement('button');
         closeButton.type = 'button';
@@ -127,7 +189,7 @@ export class WindowManager {
         closeButton.title = 'Close';
         closeButton.textContent = '✕';
         closeButton.addEventListener('click', () => this.closeWindow(id));
-        controls.append(minimizeButton, closeButton);
+        controls.append(closeButton);
 
         titlebar.append(titleElement, controls);
         this.makeDraggable(element, titlebar);
@@ -145,6 +207,15 @@ export class WindowManager {
         titlebar.addEventListener('pointerdown', (event: PointerEvent) => {
             if ((event.target as HTMLElement).closest('.window__control')) {
                 return;
+            }
+
+            // Gecentreerde vensters staan via transform gepositioneerd; zet ze eerst om naar left/top.
+            if (element.classList.contains('window--centered')) {
+                const rect = element.getBoundingClientRect();
+                const areaRect = this.areaElement.getBoundingClientRect();
+                element.classList.remove('window--centered');
+                element.style.left = `${rect.left - areaRect.left}px`;
+                element.style.top = `${rect.top - areaRect.top}px`;
             }
 
             const startX = event.clientX;

@@ -5,6 +5,7 @@ import { DesktopClock } from './desktop/DesktopClock';
 import { DesktopIcons } from './desktop/DesktopIcons';
 import { StartMenu } from './desktop/StartMenu';
 import { WindowManager } from './window/WindowManager';
+import { createShowDialog } from './window/showDialog';
 
 registerDefaultApps();
 
@@ -22,10 +23,11 @@ const taskbarWindowsElement = document.querySelector<HTMLElement>('.taskbar__win
 if (desktopAreaElement && taskbarWindowsElement) {
     const windowManager = new WindowManager(desktopAreaElement, taskbarWindowsElement);
     const openApp = createOpenApp(windowManager);
+    const showDialog = createShowDialog(windowManager);
 
     new DesktopIcons(desktopAreaElement, openApp);
 
     if (startMenuElement && startButtonElement) {
-        new StartMenu(startMenuElement, startButtonElement, openApp);
+        new StartMenu(startMenuElement, startButtonElement, openApp, showDialog);
     }
 }

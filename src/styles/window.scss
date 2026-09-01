@@ -10,6 +10,10 @@
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 
+    &[hidden] {
+        display: none;
+    }
+
     &--active {
         border-color: #0831d9;
         box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.45);
@@ -54,6 +58,10 @@
     border: 1px solid #ffffff;
     border-radius: 3px;
     cursor: pointer;
+
+    &--minimize {
+        padding-bottom: 6px;
+    }
 
     &--close {
         background: linear-gradient(to bottom, #f19d7f 0%, #d8562e 50%, #b13a17 100%);

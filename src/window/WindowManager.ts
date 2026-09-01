@@ -55,7 +55,16 @@ export class WindowManager {
     activate(id: string): void {
         const managedWindow = this.windows.get(id);
 
-        if (!managedWindow || this.activeWindowId === id) {
+        if (!managedWindow) {
+            return;
+        }
+
+        if (managedWindow.minimized) {
+            managedWindow.minimized = false;
+            managedWindow.element.hidden = false;
+        }
+
+        if (this.activeWindowId === id) {
             return;
         }
 
@@ -69,6 +78,23 @@ export class WindowManager {
         managedWindow.taskbarButton.classList.add('taskbar-button--active');
         managedWindow.element.style.zIndex = String(this.nextZIndex++);
         this.activeWindowId = id;
+    }
+
+    minimizeWindow(id: string): void {
+        const managedWindow = this.windows.get(id);
+
+        if (!managedWindow || managedWindow.minimized) {
+            return;
+        }
+
+        managedWindow.minimized = true;
+        managedWindow.element.hidden = true;
+        managedWindow.element.classList.remove('window--active');
+        managedWindow.taskbarButton.classList.remove('taskbar-button--active');
+
+        if (this.activeWindowId === id) {
+            this.activeWindowId = null;
+        }
     }
 
     private createWindowElement(id: string, title: string, content: HTMLElement): HTMLElement {
@@ -88,13 +114,20 @@ export class WindowManager {
         const controls = document.createElement('div');
         controls.className = 'window__controls';
 
+        const minimizeButton = document.createElement('button');
+        minimizeButton.type = 'button';
+        minimizeButton.className = 'window__control window__control--minimize';
+        minimizeButton.title = 'Minimize';
+        minimizeButton.textContent = '_';
+        minimizeButton.addEventListener('click', () => this.minimizeWindow(id));
+
         const closeButton = document.createElement('button');
         closeButton.type = 'button';
         closeButton.className = 'window__control window__control--close';
         closeButton.title = 'Close';
         closeButton.textContent = '✕';
         closeButton.addEventListener('click', () => this.closeWindow(id));
-        controls.append(closeButton);
+        controls.append(minimizeButton, closeButton);
 
         titlebar.append(titleElement, controls);
 
@@ -112,7 +145,14 @@ export class WindowManager {
         button.type = 'button';
         button.className = 'taskbar-button';
         button.textContent = title;
-        button.addEventListener('click', () => this.activate(id));
+        button.addEventListener('click', () => {
+            if (this.activeWindowId === id) {
+                this.minimizeWindow(id);
+                return;
+            }
+
+            this.activate(id);
+        });
 
         return button;
     }

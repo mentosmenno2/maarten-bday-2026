@@ -20,6 +20,8 @@ export const recycleBinApp: AppDefinition = {
         const body = document.createElement('div');
         body.className = 'app-recycle-bin__body';
 
+        let hasDuck = true;
+
         const renderDuck = (): void => {
             body.replaceChildren();
 
@@ -48,6 +50,12 @@ export const recycleBinApp: AppDefinition = {
         };
 
         emptyButton.addEventListener('click', () => {
+            if (!hasDuck) {
+                return;
+            }
+
+            hasDuck = false;
+            emptyButton.disabled = true;
             renderEmpty();
             showDialog({ title: 'Recycle Bin', message: 'What the duck?!' });
         });

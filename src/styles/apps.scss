@@ -98,9 +98,14 @@
         border-radius: 2px;
         cursor: pointer;
 
-        &:hover {
+        &:hover:not(:disabled) {
             background: #fce8b8;
             border-color: #e0a83f;
+        }
+
+        &:disabled {
+            color: #9a9a9a;
+            cursor: default;
         }
     }
 

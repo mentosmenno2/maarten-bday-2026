@@ -9,11 +9,6 @@ export class DesktopClock {
         minute: '2-digit',
         hour12: false,
     });
-    private readonly dateFormatter = new Intl.DateTimeFormat(undefined, {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
 
     constructor(timeElement: HTMLElement, dateElement: HTMLElement, systemClock: SystemClock) {
         this.timeElement = timeElement;
@@ -29,6 +24,14 @@ export class DesktopClock {
     render(): void {
         const now = this.systemClock.getNow();
         this.timeElement.textContent = this.timeFormatter.format(now);
-        this.dateElement.textContent = this.dateFormatter.format(now);
+        this.dateElement.textContent = toIsoDate(now);
     }
+}
+
+function toIsoDate(date: Date): string {
+    const year = date.getFullYear().toString().padStart(4, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }

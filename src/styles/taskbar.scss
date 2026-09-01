@@ -1,0 +1,39 @@
+.taskbar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: stretch;
+    height: var(--taskbar-height);
+    background: linear-gradient(to bottom, #245edb 0%, #3f8cf3 8%, #245edb 40%, #1941a5 90%, #1941a5 100%);
+    border-top: 1px solid #1042c0;
+}
+
+.taskbar__start {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+}
+
+.taskbar__windows {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+.taskbar__tray {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #13a1f5 0%, #1391eb 8%, #0d80d8 40%, #1174c8 90%, #0e6bb8 100%);
+    border-left: 1px solid #096ebd;
+}

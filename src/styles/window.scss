@@ -26,6 +26,8 @@
     flex: 0 0 auto;
     height: 26px;
     padding: 0 4px 0 6px;
+    cursor: default;
+    touch-action: none;
     background: linear-gradient(to bottom, #7ba3dd 0%, #a4c2ea 8%, #7ba3dd 40%, #6d94cf 90%, #6a8fc9 100%);
 
     .window--active & {

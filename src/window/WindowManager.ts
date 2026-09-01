@@ -130,6 +130,7 @@ export class WindowManager {
         controls.append(minimizeButton, closeButton);
 
         titlebar.append(titleElement, controls);
+        this.makeDraggable(element, titlebar);
 
         const contentElement = document.createElement('div');
         contentElement.className = 'window__content';
@@ -138,6 +139,36 @@ export class WindowManager {
         element.append(titlebar, contentElement);
 
         return element;
+    }
+
+    private makeDraggable(element: HTMLElement, titlebar: HTMLElement): void {
+        titlebar.addEventListener('pointerdown', (event: PointerEvent) => {
+            if ((event.target as HTMLElement).closest('.window__control')) {
+                return;
+            }
+
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startLeft = element.offsetLeft;
+            const startTop = element.offsetTop;
+
+            titlebar.setPointerCapture(event.pointerId);
+
+            const onPointerMove = (moveEvent: PointerEvent): void => {
+                element.style.left = `${startLeft + moveEvent.clientX - startX}px`;
+                element.style.top = `${startTop + moveEvent.clientY - startY}px`;
+            };
+
+            const onPointerUp = (): void => {
+                titlebar.removeEventListener('pointermove', onPointerMove);
+                titlebar.removeEventListener('pointerup', onPointerUp);
+                titlebar.removeEventListener('pointercancel', onPointerUp);
+            };
+
+            titlebar.addEventListener('pointermove', onPointerMove);
+            titlebar.addEventListener('pointerup', onPointerUp);
+            titlebar.addEventListener('pointercancel', onPointerUp);
+        });
     }
 
     private createTaskbarButton(id: string, title: string): HTMLButtonElement {

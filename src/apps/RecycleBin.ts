@@ -1,4 +1,5 @@
 import duckIconUrl from '../assets/icons/duck.png';
+import { playSound } from '../audio/SoundPlayer';
 import type { AppContext, AppDefinition } from './appRegistry';
 
 export const recycleBinApp: AppDefinition = {
@@ -57,6 +58,7 @@ export const recycleBinApp: AppDefinition = {
             hasDuck = false;
             emptyButton.disabled = true;
             renderEmpty();
+            playSound('recycle');
             showDialog({ title: 'Recycle Bin', message: 'What the duck?!' });
         });
 

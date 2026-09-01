@@ -1,3 +1,5 @@
+import { playSound } from '../audio/SoundPlayer';
+
 export interface BootScreens {
     container: HTMLElement;
     powerOff: HTMLElement;
@@ -25,6 +27,7 @@ export class BootFlow {
     startBooting(): void {
         this.clearTimer();
         this.setActiveScreen(this.screens.booting);
+        playSound('startup');
         this.timerId = window.setTimeout(() => this.showLogin(), BOOT_DURATION_MS);
     }
 
@@ -36,13 +39,16 @@ export class BootFlow {
     showDesktop(): void {
         this.clearTimer();
         this.screens.container.hidden = true;
+        playSound('logon');
     }
 
     logOff(): void {
+        playSound('logoff');
         this.showLogin();
     }
 
     turnOff(): void {
+        playSound('shutdown');
         this.showPowerOff();
     }
 

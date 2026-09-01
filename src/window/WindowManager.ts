@@ -1,3 +1,5 @@
+import { playSound } from '../audio/SoundPlayer';
+
 export interface WindowOptions {
     width?: number;
     height?: number;
@@ -74,6 +76,7 @@ export class WindowManager {
         if (managedWindow.minimized) {
             managedWindow.minimized = false;
             managedWindow.element.hidden = false;
+            playSound('restore');
         }
 
         if (this.activeWindowId === id) {
@@ -103,6 +106,7 @@ export class WindowManager {
         managedWindow.element.hidden = true;
         managedWindow.element.classList.remove('window--active');
         managedWindow.taskbarButton.classList.remove('taskbar-button--active');
+        playSound('minimize');
 
         if (this.activeWindowId === id) {
             this.activeWindowId = null;

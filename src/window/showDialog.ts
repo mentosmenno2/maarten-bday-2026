@@ -1,3 +1,4 @@
+import { playSound } from '../audio/SoundPlayer';
 import type { WindowManager } from '../window/WindowManager';
 
 export interface DialogButton {
@@ -19,6 +20,8 @@ let dialogCount = 0;
 export function createShowDialog(windowManager: WindowManager): ShowDialog {
     return ({ title, message, icon, buttons = [{ label: 'OK' }] }: DialogOptions): void => {
         const id = `dialog-${++dialogCount}`;
+
+        playSound('dialog');
 
         const container = document.createElement('div');
         container.className = 'dialog';

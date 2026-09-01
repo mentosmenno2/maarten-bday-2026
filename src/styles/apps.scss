@@ -246,6 +246,22 @@
         border-radius: 2px;
     }
 
+    &__sync-button {
+        align-self: flex-start;
+        margin-top: 10px;
+        padding: 3px 10px;
+        font-family: inherit;
+        font-size: 11px;
+        background: #ece9d8;
+        border: 1px solid #7f9db9;
+        border-radius: 3px;
+        cursor: pointer;
+
+        &:hover {
+            border-color: #f0a30a;
+        }
+    }
+
     &__buttons {
         display: flex;
         justify-content: flex-end;

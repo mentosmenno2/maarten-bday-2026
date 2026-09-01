@@ -28,6 +28,14 @@ export function createOpenDateTimeWindow(
         input.value = toDateInputValue(systemClock.getNow());
         label.append(input);
 
+        const syncButton = document.createElement('button');
+        syncButton.type = 'button';
+        syncButton.className = 'date-time-window__sync-button';
+        syncButton.textContent = 'Sync with time.windows.com';
+        syncButton.addEventListener('click', () => {
+            input.value = toDateInputValue(new Date());
+        });
+
         const buttons = document.createElement('div');
         buttons.className = 'date-time-window__buttons';
 
@@ -68,7 +76,7 @@ export function createOpenDateTimeWindow(
         });
 
         buttons.append(confirmButton, cancelButton);
-        container.append(label, buttons);
+        container.append(label, syncButton, buttons);
 
         windowManager.openWindow(WINDOW_ID, 'Date and Time Properties', container, {
             width: 300,

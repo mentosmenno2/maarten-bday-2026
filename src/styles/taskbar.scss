@@ -45,8 +45,32 @@
 }
 
 .taskbar__clock {
-    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 6px;
+    color: #ffffff;
+    font-family: inherit;
+    line-height: 1.2;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.35);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.35);
+    }
+}
+
+.taskbar__clock-time {
+    font-size: 11px;
+}
+
+.taskbar__clock-date {
+    font-size: 10px;
+    opacity: 0.9;
 }
 
 .taskbar-button {

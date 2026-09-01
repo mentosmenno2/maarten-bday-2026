@@ -4,8 +4,24 @@
     justify-content: space-between;
     height: 100%;
 
-    &__message {
+    &__body {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
         margin: 4px 0 12px;
+    }
+
+    &__icon {
+        flex: 0 0 auto;
+        width: 32px;
+        height: 32px;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    &__message {
+        margin: 0;
     }
 
     &__buttons {
@@ -206,5 +222,48 @@
         font-size: 12px;
         border: 1px solid #7f9db9;
         resize: none;
+    }
+}
+
+.date-time-window {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    &__label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 11px;
+    }
+
+    &__input {
+        padding: 3px 6px;
+        font-family: inherit;
+        font-size: 12px;
+        border: 1px solid #7f9db9;
+        border-radius: 2px;
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    &__button {
+        min-width: 72px;
+        padding: 3px 10px;
+        font-family: inherit;
+        font-size: 11px;
+        background: #ece9d8;
+        border: 1px solid #7f9db9;
+        border-radius: 3px;
+        cursor: pointer;
+
+        &:hover {
+            border-color: #f0a30a;
+        }
     }
 }

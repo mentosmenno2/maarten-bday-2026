@@ -3,20 +3,20 @@ import { registerApp } from './apps/appRegistry';
 import { createOpenApp } from './apps/openApp';
 import { registerDefaultApps } from './apps/registerDefaultApps';
 import { BootFlow } from './boot/BootFlow';
+import { createOpenDateTimeWindow } from './desktop/DateTimeWindow';
 import { DesktopClock } from './desktop/DesktopClock';
 import { DesktopIcons } from './desktop/DesktopIcons';
 import { StartMenu } from './desktop/StartMenu';
+import { SystemClock } from './desktop/SystemClock';
 import { registerEasterEggs } from './easter-eggs/registerEasterEggs';
 import { WindowManager } from './window/WindowManager';
 import { createShowDialog } from './window/showDialog';
 
 registerDefaultApps();
 
-const clockElement = document.querySelector<HTMLElement>('.taskbar__clock');
-
-if (clockElement) {
-    new DesktopClock(clockElement).start();
-}
+const clockButtonElement = document.querySelector<HTMLElement>('.taskbar__clock');
+const clockTimeElement = document.querySelector<HTMLElement>('.taskbar__clock-time');
+const clockDateElement = document.querySelector<HTMLElement>('.taskbar__clock-date');
 
 const startMenuElement = document.querySelector<HTMLElement>('.start-menu');
 const startButtonElement = document.querySelector<HTMLElement>('.start-button');
@@ -33,6 +33,9 @@ const logInButtonElement = document.querySelector<HTMLElement>('[data-action="lo
 if (
     desktopAreaElement &&
     taskbarWindowsElement &&
+    clockButtonElement &&
+    clockTimeElement &&
+    clockDateElement &&
     bootScreensElement &&
     powerOffScreenElement &&
     bootingScreenElement &&
@@ -43,6 +46,18 @@ if (
     const windowManager = new WindowManager(desktopAreaElement, taskbarWindowsElement);
     const openApp = createOpenApp(windowManager);
     const showDialog = createShowDialog(windowManager);
+
+    const systemClock = new SystemClock();
+    const desktopClock = new DesktopClock(clockTimeElement, clockDateElement, systemClock);
+    desktopClock.start();
+
+    const openDateTimeWindow = createOpenDateTimeWindow(
+        windowManager,
+        systemClock,
+        showDialog,
+        () => desktopClock.render(),
+    );
+    clockButtonElement.addEventListener('click', () => openDateTimeWindow());
 
     const bootFlow = new BootFlow({
         container: bootScreensElement,

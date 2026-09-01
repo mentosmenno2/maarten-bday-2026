@@ -1,8 +1,14 @@
+import type { ShowDialog } from '../window/showDialog';
+
+export interface AppContext {
+    showDialog: ShowDialog;
+}
+
 export interface AppDefinition {
     id: string;
     title: string;
     windowOptions?: { width?: number; height?: number };
-    createContent(): HTMLElement;
+    createContent(context: AppContext): HTMLElement;
 }
 
 const apps = new Map<string, AppDefinition>();

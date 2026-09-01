@@ -1,13 +1,27 @@
 import type { AppDefinition } from './appRegistry';
 
+interface Drive {
+    label: string;
+    size?: string;
+}
+
 interface DriveGroup {
     heading: string;
-    drives: string[];
+    drives: Drive[];
 }
 
 const driveGroups: DriveGroup[] = [
-    { heading: 'Hard Disk Drives', drives: ['(C:) Local Disk', '(D:) Backup'] },
-    { heading: 'Devices with Removable Storage', drives: ['(A:) 3½ Floppy', '(E:) CD Drive'] },
+    {
+        heading: 'Hard Disk Drives',
+        drives: [{ label: '(C:) Local Disk' }, { label: '(D:) Backup' }],
+    },
+    {
+        heading: 'Devices with Removable Storage',
+        drives: [
+            { label: '(A:) 3½ Floppy', size: '3.14159265 MB' },
+            { label: '(E:) CD Drive', size: '700 MB' },
+        ],
+    },
 ];
 
 export const myComputerApp: AppDefinition = {
@@ -33,7 +47,19 @@ export const myComputerApp: AppDefinition = {
             group.drives.forEach((drive) => {
                 const item = document.createElement('li');
                 item.className = 'app-my-computer__drive';
-                item.textContent = drive;
+
+                const label = document.createElement('span');
+                label.className = 'app-my-computer__drive-label';
+                label.textContent = drive.label;
+                item.append(label);
+
+                if (drive.size) {
+                    const size = document.createElement('span');
+                    size.className = 'app-my-computer__drive-size';
+                    size.textContent = drive.size;
+                    item.append(size);
+                }
+
                 list.append(item);
             });
 

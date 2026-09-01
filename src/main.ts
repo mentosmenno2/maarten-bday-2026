@@ -44,8 +44,8 @@ if (
     logInButtonElement
 ) {
     const windowManager = new WindowManager(desktopAreaElement, taskbarWindowsElement);
-    const openApp = createOpenApp(windowManager);
     const showDialog = createShowDialog(windowManager);
+    const openApp = createOpenApp(windowManager, { showDialog });
 
     const systemClock = new SystemClock();
     const desktopClock = new DesktopClock(clockTimeElement, clockDateElement, systemClock);

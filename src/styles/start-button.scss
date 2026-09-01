@@ -1,0 +1,42 @@
+.start-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 100%;
+    padding: 0 22px 2px 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to bottom, #61b842 0%, #47a01f 12%, #3b8f16 40%, #2f7d0c 88%, #276b09 100%);
+    border: 0;
+    border-right: 1px solid #2b6c0a;
+    border-radius: 2px 12px 12px 2px / 2px 17px 17px 2px;
+    cursor: pointer;
+
+    &:hover {
+        background: linear-gradient(to bottom, #7bcc5c 0%, #57b02b 12%, #48a11d 40%, #3a8d12 88%, #2f7b0c 100%);
+    }
+
+    &:active,
+    &--open {
+        background: linear-gradient(to bottom, #2f7d0c 0%, #3b8f16 60%, #52ac26 100%);
+        box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.35);
+    }
+}
+
+.start-button__logo {
+    width: 16px;
+    height: 16px;
+    background:
+        linear-gradient(#f14a3b, #f14a3b) 0 0 / 7px 7px no-repeat,
+        linear-gradient(#7cb63a, #7cb63a) 9px 0 / 7px 7px no-repeat,
+        linear-gradient(#3f8ce0, #3f8ce0) 0 9px / 7px 7px no-repeat,
+        linear-gradient(#f5c518, #f5c518) 9px 9px / 7px 7px no-repeat;
+}
+
+.start-button__label {
+    line-height: 1;
+}

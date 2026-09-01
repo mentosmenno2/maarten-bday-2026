@@ -1,0 +1,103 @@
+.taskbar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: stretch;
+    height: var(--taskbar-height);
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 12%),
+        linear-gradient(to bottom, #2b6fe0 0%, #245edb 45%, #1c4fc4 80%, #1941a5 100%);
+    border-top: 1px solid #4a91f2;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.taskbar__start {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+}
+
+.taskbar__windows {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+.taskbar__tray {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    color: #ffffff;
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 15%),
+        linear-gradient(to bottom, #17a3f0 0%, #1391eb 40%, #0d80d8 80%, #0e6bb8 100%);
+    border-left: 1px solid #16a0e8;
+    box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+.taskbar__clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 6px;
+    color: #ffffff;
+    font-family: inherit;
+    line-height: 1.2;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.35);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.35);
+    }
+}
+
+.taskbar__clock-time {
+    font-size: 11px;
+}
+
+.taskbar__clock-date {
+    font-size: 10px;
+    opacity: 0.9;
+}
+
+.taskbar-button {
+    flex: 0 1 160px;
+    height: 24px;
+    padding: 0 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 45%),
+        linear-gradient(to bottom, #4a8ef5 0%, #2f6fd8 55%, #245bbb 100%);
+    border: 1px solid #1c4fa8;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+
+    &:hover {
+        filter: brightness(1.15);
+    }
+
+    &--active {
+        background: linear-gradient(to bottom, #1b4a9e 0%, #2761c4 60%, #3a7ae0 100%);
+        box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.5);
+    }
+}

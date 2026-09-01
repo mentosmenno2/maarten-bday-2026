@@ -1,0 +1,29 @@
+@use 'desktop';
+@use 'desktop-icon';
+@use 'taskbar';
+@use 'start-button';
+@use 'start-menu';
+@use 'window';
+@use 'apps';
+@use 'boot-screens';
+
+:root {
+    --taskbar-height: 34px;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-size: 12px;
+    user-select: none;
+}
+
+#app {
+    height: 100%;
+}

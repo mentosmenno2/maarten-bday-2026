@@ -4,11 +4,112 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maarten's Birthday 2026</title>
-  <link rel="stylesheet" href="/src/style.scss" />
 </head>
 <body>
   <div id="app">
-    <!-- Game components will be inserted here -->
+    <div class="desktop">
+      <div class="desktop__area">
+        <div class="desktop-icons">
+          <button type="button" class="desktop-icon" data-app-id="my-computer">
+            <span class="desktop-icon__image desktop-icon__image--computer"></span>
+            <span class="desktop-icon__label">My Computer</span>
+          </button>
+          <button type="button" class="desktop-icon" data-app-id="internet-explorer">
+            <span class="desktop-icon__image desktop-icon__image--internet"></span>
+            <span class="desktop-icon__label">Internet Explorer</span>
+          </button>
+          <button type="button" class="desktop-icon" data-app-id="notepad">
+            <span class="desktop-icon__image desktop-icon__image--notepad"></span>
+            <span class="desktop-icon__label">Notepad</span>
+          </button>
+          <button type="button" class="desktop-icon" data-app-id="recycle-bin">
+            <span class="desktop-icon__image desktop-icon__image--recycle-bin"></span>
+            <span class="desktop-icon__label">Recycle Bin</span>
+          </button>
+        </div>
+      </div>
+      <div class="start-menu" hidden>
+        <div class="start-menu__header">
+          <span class="start-menu__avatar"></span>
+          <span class="start-menu__user">Maarten</span>
+        </div>
+        <div class="start-menu__body">
+          <div class="start-menu__column start-menu__column--left">
+            <button type="button" class="start-menu__item" data-app-id="internet-explorer">
+              <span class="start-menu__icon start-menu__icon--internet"></span>
+              <span class="start-menu__label">Internet Explorer</span>
+            </button>
+            <button type="button" class="start-menu__item" data-app-id="notepad">
+              <span class="start-menu__icon start-menu__icon--notepad"></span>
+              <span class="start-menu__label">Notepad</span>
+            </button>
+          </div>
+          <div class="start-menu__column start-menu__column--right">
+            <button type="button" class="start-menu__item" data-app-id="my-computer">
+              <span class="start-menu__icon start-menu__icon--computer"></span>
+              <span class="start-menu__label">My Computer</span>
+            </button>
+            <button type="button" class="start-menu__item" data-app-id="recycle-bin">
+              <span class="start-menu__icon start-menu__icon--recycle-bin"></span>
+              <span class="start-menu__label">Recycle Bin</span>
+            </button>
+          </div>
+        </div>
+        <div class="start-menu__footer">
+          <button type="button" class="start-menu__action" data-action="log-off">
+            <span class="start-menu__action-icon start-menu__action-icon--log-off"></span>
+            <span>Log Off</span>
+          </button>
+          <button type="button" class="start-menu__action" data-action="turn-off">
+            <span class="start-menu__action-icon start-menu__action-icon--turn-off"></span>
+            <span>Turn Off Computer</span>
+          </button>
+        </div>
+      </div>
+      <div class="taskbar">
+        <div class="taskbar__start">
+          <button type="button" class="start-button">
+            <span class="start-button__logo"></span>
+            <span class="start-button__label">start</span>
+          </button>
+        </div>
+        <div class="taskbar__windows"></div>
+        <div class="taskbar__tray">
+          <button type="button" class="taskbar__clock" data-action="open-date-time">
+            <span class="taskbar__clock-time"></span>
+            <span class="taskbar__clock-date"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="boot-screens" data-boot-screens>
+      <div class="power-off-screen" data-screen="power-off">
+        <button type="button" class="power-off-screen__button" data-action="power-on" title="Turn on"></button>
+        <p class="power-off-screen__hint">Press the power button to start</p>
+      </div>
+      <div class="boot-loading-screen" data-screen="booting" hidden>
+        <div class="boot-flag">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="boot-loading-screen__bar">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="boot-loading-screen__text">Starting Windows...</p>
+      </div>
+      <div class="login-screen" data-screen="login" hidden>
+        <p class="login-screen__title">Maarten's Birthday</p>
+        <button type="button" class="login-screen__user" data-action="log-in">
+          <span class="login-screen__avatar"></span>
+          <span class="login-screen__name">Maarten</span>
+        </button>
+        <p class="login-screen__hint">Click your name to log on</p>
+      </div>
+    </div>
   </div>
   <script type="module" src="/src/main.ts"></script>
 </body>

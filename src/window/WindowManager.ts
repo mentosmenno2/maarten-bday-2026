@@ -155,8 +155,11 @@ export class WindowManager {
             titlebar.setPointerCapture(event.pointerId);
 
             const onPointerMove = (moveEvent: PointerEvent): void => {
-                element.style.left = `${startLeft + moveEvent.clientX - startX}px`;
-                element.style.top = `${startTop + moveEvent.clientY - startY}px`;
+                const left = startLeft + moveEvent.clientX - startX;
+                const top = startTop + moveEvent.clientY - startY;
+
+                element.style.left = `${this.clampLeft(left, element)}px`;
+                element.style.top = `${this.clampTop(top)}px`;
             };
 
             const onPointerUp = (): void => {
@@ -169,6 +172,20 @@ export class WindowManager {
             titlebar.addEventListener('pointerup', onPointerUp);
             titlebar.addEventListener('pointercancel', onPointerUp);
         });
+    }
+
+    // Houd altijd een stuk titelbalk binnen het desktopgebied bereikbaar.
+    private clampLeft(left: number, element: HTMLElement): number {
+        const minLeft = 40 - element.offsetWidth;
+        const maxLeft = this.areaElement.clientWidth - 40;
+
+        return Math.min(Math.max(left, minLeft), maxLeft);
+    }
+
+    private clampTop(top: number): number {
+        const maxTop = this.areaElement.clientHeight - 26;
+
+        return Math.min(Math.max(top, 0), maxTop);
     }
 
     private createTaskbarButton(id: string, title: string): HTMLButtonElement {

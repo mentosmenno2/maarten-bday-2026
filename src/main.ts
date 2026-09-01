@@ -1,8 +1,13 @@
 import './styles/main.scss';
+import { getApps } from './apps/appRegistry';
+import { createOpenApp } from './apps/openApp';
+import { registerDefaultApps } from './apps/registerDefaultApps';
 import { DesktopClock } from './desktop/DesktopClock';
 import { DesktopIcons } from './desktop/DesktopIcons';
 import { StartMenu } from './desktop/StartMenu';
 import { WindowManager } from './window/WindowManager';
+
+registerDefaultApps();
 
 const clockElement = document.querySelector<HTMLElement>('.taskbar__clock');
 
@@ -24,17 +29,14 @@ if (desktopAreaElement && taskbarWindowsElement) {
     new DesktopIcons(desktopAreaElement);
 
     const windowManager = new WindowManager(desktopAreaElement, taskbarWindowsElement);
+    const openApp = createOpenApp(windowManager);
 
-    // Tijdelijke testknoppen, worden verwijderd zodra apps gekoppeld zijn.
-    ['A', 'B', 'C'].forEach((name) => {
+    // Tijdelijke triggers, worden vervangen door de desktopiconen in stap 24.
+    getApps().forEach((app) => {
         const testButton = document.createElement('button');
         testButton.className = 'window-test-button';
-        testButton.textContent = `Testvenster ${name}`;
-        testButton.addEventListener('click', () => {
-            const content = document.createElement('p');
-            content.textContent = `Dit is testvenster ${name}.`;
-            windowManager.openWindow(`test-window-${name}`, `Testvenster ${name}`, content);
-        });
+        testButton.textContent = app.title;
+        testButton.addEventListener('click', () => openApp(app.id));
         desktopAreaElement.append(testButton);
     });
 }

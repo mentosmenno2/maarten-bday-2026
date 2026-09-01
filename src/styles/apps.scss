@@ -1,0 +1,109 @@
+.app-my-computer {
+    &__heading {
+        margin: 0 0 8px;
+        font-size: 13px;
+    }
+
+    &__group {
+        margin: 10px 0 4px;
+        padding-bottom: 2px;
+        font-size: 11px;
+        color: #21418f;
+        border-bottom: 1px solid #c3d3ea;
+    }
+
+    &__list {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    &__drive {
+        padding: 1px 0;
+    }
+}
+
+.app-recycle-bin__empty {
+    margin: 0;
+    color: #555555;
+}
+
+.app-internet-explorer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &__toolbar {
+        display: flex;
+        gap: 4px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #d4d0c8;
+    }
+
+    &__toolbar-button {
+        padding: 2px 6px;
+        font-family: inherit;
+        font-size: 11px;
+        background: #ece9d8;
+        border: 1px solid #aca899;
+        cursor: pointer;
+    }
+
+    &__address-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        font-size: 11px;
+        border-bottom: 1px solid #d4d0c8;
+    }
+
+    &__address {
+        flex: 1 1 auto;
+        padding: 2px 4px;
+        font-family: inherit;
+        font-size: 11px;
+        border: 1px solid #7f9db9;
+    }
+
+    &__page {
+        flex: 1 1 auto;
+        padding: 8px 4px;
+        overflow: auto;
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+
+        p {
+            margin: 0;
+        }
+    }
+}
+
+.app-notepad {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &__menubar {
+        display: flex;
+        gap: 10px;
+        padding-bottom: 4px;
+        font-size: 11px;
+    }
+
+    &__menu-item {
+        cursor: default;
+    }
+
+    &__textarea {
+        flex: 1 1 auto;
+        width: 100%;
+        padding: 2px;
+        font-family: 'Lucida Console', Consolas, monospace;
+        font-size: 12px;
+        border: 1px solid #7f9db9;
+        resize: none;
+    }
+}

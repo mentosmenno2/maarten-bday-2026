@@ -37,3 +37,8 @@
     background: linear-gradient(to bottom, #13a1f5 0%, #1391eb 8%, #0d80d8 40%, #1174c8 90%, #0e6bb8 100%);
     border-left: 1px solid #096ebd;
 }
+
+.taskbar__clock {
+    font-size: 11px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.35);
+}

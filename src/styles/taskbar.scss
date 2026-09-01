@@ -7,8 +7,11 @@
     display: flex;
     align-items: stretch;
     height: var(--taskbar-height);
-    background: linear-gradient(to bottom, #245edb 0%, #3f8cf3 8%, #245edb 40%, #1941a5 90%, #1941a5 100%);
-    border-top: 1px solid #1042c0;
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 12%),
+        linear-gradient(to bottom, #2b6fe0 0%, #245edb 45%, #1c4fc4 80%, #1941a5 100%);
+    border-top: 1px solid #4a91f2;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .taskbar__start {
@@ -32,10 +35,13 @@
     flex: 0 0 auto;
     align-items: center;
     gap: 6px;
-    padding: 0 10px;
+    padding: 0 12px;
     color: #ffffff;
-    background: linear-gradient(to bottom, #13a1f5 0%, #1391eb 8%, #0d80d8 40%, #1174c8 90%, #0e6bb8 100%);
-    border-left: 1px solid #096ebd;
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 15%),
+        linear-gradient(to bottom, #17a3f0 0%, #1391eb 40%, #0d80d8 80%, #0e6bb8 100%);
+    border-left: 1px solid #16a0e8;
+    box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.2);
 }
 
 .taskbar__clock {
@@ -54,17 +60,20 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    background: linear-gradient(to bottom, #3c81f3 0%, #2f6fd8 50%, #245bbb 100%);
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 45%),
+        linear-gradient(to bottom, #4a8ef5 0%, #2f6fd8 55%, #245bbb 100%);
     border: 1px solid #1c4fa8;
     border-radius: 3px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
     cursor: pointer;
 
     &:hover {
-        filter: brightness(1.12);
+        filter: brightness(1.15);
     }
 
     &--active {
-        background: linear-gradient(to bottom, #1d4fa8 0%, #2761c4 60%, #3a7ae0 100%);
-        box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.45);
+        background: linear-gradient(to bottom, #1b4a9e 0%, #2761c4 60%, #3a7ae0 100%);
+        box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.5);
     }
 }

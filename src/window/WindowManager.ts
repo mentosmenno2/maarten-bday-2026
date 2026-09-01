@@ -208,6 +208,13 @@ export class WindowManager {
 
         element.append(titlebar, contentElement);
 
+        // Add resize handle
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = 'window__resize-handle';
+        element.append(resizeHandle);
+
+        this.makeResizable(element);
+
         return element;
     }
 
@@ -253,7 +260,57 @@ export class WindowManager {
         });
     }
 
-    // Houd altijd een stuk titelbalk binnen het desktopgebied bereikbaar.
+    private makeResizable(element: HTMLElement): void {
+        const resizeHandle = element.querySelector('.window__resize-handle') as HTMLElement;
+        if (!resizeHandle) return;
+
+        resizeHandle.addEventListener('pointerdown', (event: PointerEvent) => {
+            event.preventDefault();
+
+            // Exit resize mode if window is maximized
+            if (element.classList.contains('window--maximized')) {
+                return;
+            }
+
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startWidth = element.offsetWidth;
+            const startHeight = element.offsetHeight;
+            const minWidth = 200;
+            const minHeight = 150;
+
+            resizeHandle.setPointerCapture(event.pointerId);
+
+            const onPointerMove = (moveEvent: PointerEvent): void => {
+                const deltaX = moveEvent.clientX - startX;
+                const deltaY = moveEvent.clientY - startY;
+
+                const newWidth = Math.max(minWidth, startWidth + deltaX);
+                const newHeight = Math.max(minHeight, startHeight + deltaY);
+
+                // Clamp width to keep window visible
+                const maxWidth = this.areaElement.clientWidth - element.offsetLeft;
+                const clampedWidth = Math.min(newWidth, maxWidth);
+
+                // Clamp height to keep window visible
+                const maxHeight = this.areaElement.clientHeight - element.offsetTop;
+                const clampedHeight = Math.min(newHeight, maxHeight);
+
+                element.style.width = `${clampedWidth}px`;
+                element.style.height = `${clampedHeight}px`;
+            };
+
+            const onPointerUp = (): void => {
+                resizeHandle.removeEventListener('pointermove', onPointerMove);
+                resizeHandle.removeEventListener('pointerup', onPointerUp);
+                resizeHandle.removeEventListener('pointercancel', onPointerUp);
+            };
+
+            resizeHandle.addEventListener('pointermove', onPointerMove);
+            resizeHandle.addEventListener('pointerup', onPointerUp);
+            resizeHandle.addEventListener('pointercancel', onPointerUp);
+        });
+    }
     private clampLeft(left: number, element: HTMLElement): number {
         const minLeft = 40 - element.offsetWidth;
         const maxLeft = this.areaElement.clientWidth - 40;

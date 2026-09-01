@@ -119,3 +119,26 @@
     overflow: auto;
     user-select: text;
 }
+
+.window__resize-handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: 2px;
+    right: 2px;
+    cursor: nwse-resize;
+    touch-action: none;
+    user-select: none;
+    background-image:
+        radial-gradient(circle, #c0c0c0 1px, transparent 1px),
+        radial-gradient(circle, #c0c0c0 1px, transparent 1px),
+        radial-gradient(circle, #c0c0c0 1px, transparent 1px);
+    background-size: 3px 3px;
+    background-position: 6px 0, 3px 3px, 0 6px;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}

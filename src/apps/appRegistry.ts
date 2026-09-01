@@ -1,6 +1,7 @@
 export interface AppDefinition {
     id: string;
     title: string;
+    windowOptions?: { width?: number; height?: number };
     createContent(): HTMLElement;
 }
 

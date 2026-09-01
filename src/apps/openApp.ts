@@ -9,6 +9,6 @@ export function createOpenApp(windowManager: WindowManager): (id: string) => voi
             return;
         }
 
-        windowManager.openWindow(app.id, app.title, app.createContent());
+        windowManager.openWindow(app.id, app.title, app.createContent(), app.windowOptions);
     };
 }

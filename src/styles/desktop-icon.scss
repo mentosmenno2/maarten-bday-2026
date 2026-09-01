@@ -21,6 +21,19 @@
     &:hover .desktop-icon__image {
         filter: brightness(1.15);
     }
+
+    &--selected {
+        border-color: #ffffff;
+
+        .desktop-icon__image {
+            filter: brightness(0.8) saturate(1.4);
+        }
+
+        .desktop-icon__label {
+            background: #0a246a;
+            text-shadow: none;
+        }
+    }
 }
 
 .desktop-icon__image {

@@ -43,7 +43,7 @@ export class StartMenu {
 
             if (action === 'turn-off') {
                 this.close();
-                this.actions.onTurnOff();
+                this.showTurnOffDialog();
             }
         });
 
@@ -84,6 +84,17 @@ export class StartMenu {
             message: 'Are you sure you want to log off?',
             buttons: [
                 { label: 'Log Off', onClick: () => this.actions.onLogOff() },
+                { label: 'Cancel' },
+            ],
+        });
+    }
+
+    private showTurnOffDialog(): void {
+        this.actions.showDialog({
+            title: 'Turn off computer',
+            message: 'Are you sure you want to turn off your computer?',
+            buttons: [
+                { label: 'Turn Off', onClick: () => this.actions.onTurnOff() },
                 { label: 'Cancel' },
             ],
         });

@@ -1,8 +1,10 @@
 export class DesktopIcons {
     private readonly areaElement: HTMLElement;
+    private readonly openApp: (id: string) => void;
 
-    constructor(areaElement: HTMLElement) {
+    constructor(areaElement: HTMLElement, openApp: (id: string) => void) {
         this.areaElement = areaElement;
+        this.openApp = openApp;
 
         this.areaElement.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;
@@ -14,6 +16,15 @@ export class DesktopIcons {
             }
 
             this.clearSelection();
+        });
+
+        this.areaElement.addEventListener('dblclick', (event) => {
+            const target = event.target as HTMLElement;
+            const icon = target.closest<HTMLElement>('.desktop-icon');
+
+            if (icon?.dataset.appId) {
+                this.openApp(icon.dataset.appId);
+            }
         });
     }
 

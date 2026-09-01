@@ -1,10 +1,12 @@
 export class StartMenu {
     private readonly menuElement: HTMLElement;
     private readonly buttonElement: HTMLElement;
+    private readonly openApp: (id: string) => void;
 
-    constructor(menuElement: HTMLElement, buttonElement: HTMLElement) {
+    constructor(menuElement: HTMLElement, buttonElement: HTMLElement, openApp: (id: string) => void) {
         this.menuElement = menuElement;
         this.buttonElement = buttonElement;
+        this.openApp = openApp;
 
         this.buttonElement.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -13,6 +15,14 @@ export class StartMenu {
 
         this.menuElement.addEventListener('click', (event) => {
             event.stopPropagation();
+
+            const target = event.target as HTMLElement;
+            const item = target.closest<HTMLElement>('.start-menu__item');
+
+            if (item?.dataset.appId) {
+                this.openApp(item.dataset.appId);
+                this.close();
+            }
         });
 
         document.addEventListener('click', () => this.close());
